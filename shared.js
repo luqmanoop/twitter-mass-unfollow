@@ -2,6 +2,8 @@
 export const UNFOLLOW_ALL = "UNFOLLOW_ALL";
 /* --- end --- */
 
+export const whiteListedUsersKey = "twitter-mass-unfollow-whitelisted";
+
 export const sendMessage = async (msg) => {
   const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
 
@@ -18,4 +20,15 @@ export const sendMessage = async (msg) => {
 
 export const isExtensionPage = () => {
   return /https:\/\/(.*\.)?twitter\.com\/.*\/following/.test(location.href);
+};
+
+export const storage = {
+  set: async (key, value) => {
+    return chrome.storage.sync.set({ [key]: value }).then(() => value);
+  },
+  get: async (key) => {
+    return chrome.storage.sync.get(key).then((result) => {
+      return result[key];
+    });
+  },
 };

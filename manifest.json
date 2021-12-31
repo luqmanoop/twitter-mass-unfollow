@@ -2,5 +2,8 @@
   "name": "Twitter Mass Unfollow",
   "description": "A simple (configurable) way to mass unfollow your Twitter followings",
   "version": "1",
-  "manifest_version": 3
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "popup.html"
+  }
 }

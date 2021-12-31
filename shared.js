@@ -13,7 +13,7 @@ export const sendMessage = async (msg) => {
       if (response) resolve(response.payload);
       reject("No response");
     });
-  });
+  }).catch(console.log);
 };
 
 export const isExtensionPage = () => {

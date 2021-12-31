@@ -15,3 +15,7 @@ export const sendMessage = async (msg) => {
     });
   });
 };
+
+export const isExtensionPage = () => {
+  return /https:\/\/(.*\.)?twitter\.com\/.*\/following/.test(location.href);
+};

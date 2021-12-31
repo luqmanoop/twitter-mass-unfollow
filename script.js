@@ -4,7 +4,15 @@ let shared = {};
   shared = await import(sharedSrc);
 })();
 
-let intervalHandle;
+let scrollHandle;
+const cleanupHandle = setInterval(() => cleanup(), 1500);
+
+const cleanup = () => {
+  if (!shared.isExtensionPage() && scrollHandle) {
+    clearInterval(scrollHandle);
+    clearInterval(cleanupHandle);
+  }
+};
 
 function scroll() {
   const html = document.querySelector("html");
@@ -14,9 +22,9 @@ function scroll() {
 
   const scrollBy = timelineFollowing.clientHeight;
 
-  if (intervalHandle) clearInterval(intervalHandle);
+  if (scrollHandle) clearInterval(scrollHandle);
 
-  intervalHandle = setInterval(() => {
+  scrollHandle = setInterval(() => {
     html.scroll({
       top: timelineFollowing.offsetHeight + scrollBy,
       behavior: "smooth",
@@ -27,7 +35,6 @@ function scroll() {
 chrome.runtime.onMessage.addListener((message, sender, reply) => {
   switch (message.type) {
     case shared.UNFOLLOW_ALL:
-      console.log("here we go");
       scroll();
       return;
     default:

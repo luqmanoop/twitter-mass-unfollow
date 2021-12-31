@@ -14,22 +14,49 @@ const cleanup = () => {
   }
 };
 
-function scroll() {
+const getAccountsToUnfollow = async (unfollowAll = false) => {
+  const followings = Array.from(
+    document.querySelectorAll('[aria-label~="Following"][role=button]')
+  );
+
+  if (unfollowAll) return followings;
+
+  const whitelistedUsers = await shared.storage.get(shared.whiteListedUsersKey);
+
+  const toUnfollow = followings.filter((following) => {
+    if (!whitelistedUsers) return true;
+    const username = following
+      .getAttribute("aria-label")
+      .toLowerCase()
+      .replace("following @", "");
+
+    return !whitelistedUsers.includes(username);
+  });
+
+  return toUnfollow;
+};
+
+const confirmUnfollow = () => {
+  document
+    .querySelector("[data-testid=confirmationSheetDialog] div[role=button]")
+    .click();
+};
+
+async function scroll() {
   const html = document.querySelector("html");
   const timelineFollowing = document.querySelector(
     '[aria-label="Timeline: Following"]'
   );
-
   const scrollBy = timelineFollowing.clientHeight;
 
   if (scrollHandle) clearInterval(scrollHandle);
-
-  scrollHandle = setInterval(() => {
-    html.scroll({
-      top: timelineFollowing.offsetHeight + scrollBy,
-      behavior: "smooth",
-    });
-  }, 3000);
+  const accountsToUnffolow = await getAccountsToUnfollow();
+  //   scrollHandle = setInterval(() => {
+  //     html.scroll({
+  //       top: timelineFollowing.offsetHeight + scrollBy,
+  //       behavior: "smooth",
+  //     });
+  //   }, 3000);
 }
 
 chrome.runtime.onMessage.addListener((message, sender, reply) => {

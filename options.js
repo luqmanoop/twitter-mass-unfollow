@@ -12,6 +12,7 @@ form.addEventListener("submit", (e) => {
   let whitelistedUsers = document.querySelector("textarea").value;
   whitelistedUsers = whitelistedUsers
     .split(",")
-    .map((username) => username.trim());
+    .filter(Boolean)
+    .map((username) => username.trim().toLowerCase());
   shared.storage.set(shared.whiteListedUsersKey, whitelistedUsers);
 });

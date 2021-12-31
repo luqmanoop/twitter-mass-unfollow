@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-size: 10px;
+        max-width: 600px;
+        margin: 20px auto;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        width: auto;
+      }
+
+      h1 {
+        font-size: 2.2rem;
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+
+      label {
+        display: block;
+        font-size: 1.6rem;
+      }
+
+      span {
+        font-size: 0.8rem;
+        color: #a0a0a0;
+      }
+
+      textarea {
+        resize: none;
+        margin: 0.4rem 0 1rem;
+        padding: 0.6rem;
+        font-size: 1.2rem;
+        height: 20rem;
+      }
+
+      button {
+        padding: 1rem;
+        text-transform: uppercase;
+        border: none;
+        background-color: #2a163e;
+        color: #e3e3e3;
+        letter-spacing: 0.3rem;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #38244b;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Twitter Mass Unfollow</h1>
+
+    <form>
+      <label for="usernames">Exclude users</label>
+      <span>Add twitter user handles not to be unfollowed</span>
+      <textarea id="usernames" placeholder="jack, naval"></textarea>
+      <button type="submit">Save</button>
+    </form>
+
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

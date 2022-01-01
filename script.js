@@ -55,8 +55,8 @@ const confirmUnfollow = () => {
 
 const unfollow = (unfollowButtons = []) => {
   unfollowButtons.forEach((unfollowButton) => {
-    // unfollowButton.click();
-    // confirmUnfollow();
+    unfollowButton.click();
+    confirmUnfollow();
   });
 };
 

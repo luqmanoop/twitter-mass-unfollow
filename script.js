@@ -1,4 +1,6 @@
 const html = document.querySelector("html");
+
+let timerHandle;
 let previousScrollHeight = 0;
 let stop;
 
@@ -52,8 +54,8 @@ const confirmUnfollow = () => {
 
 const unfollow = async (unfollowButtons = []) => {
   for (const unfollowButton of unfollowButtons) {
-    // unfollowButton.click();
-    // confirmUnfollow();
+    unfollowButton.click();
+    confirmUnfollow();
     await shared.delay(50);
   }
 };
@@ -84,13 +86,15 @@ const scroll = async (notFollowing) => {
   }
 };
 
+const stopUnfollowing = () => {
+  stop = true;
+  if (timerHandle) clearInterval(timerHandle);
+};
+
 const startTimer = () => {
   shared.storage.get(shared.timerKey).then((autoStop) => {
-    console.log(autoStop);
     if (autoStop) {
-      setTimeout(() => {
-        stop = true;
-      }, 1000 * 60);
+      timerHandle = setTimeout(() => stopUnfollowing(), 1000 * 60); // 60secs
     }
   });
 };
@@ -108,7 +112,10 @@ chrome.runtime.onMessage.addListener((message, sender, reply) => {
       startTimer();
       return;
     case shared.STOP:
-      stop = true;
+      stopUnfollowing();
+      return;
+    case shared.IN_PROGRESS:
+      reply({ payload: previousScrollHeight !== 0 && !stop });
       return;
     default:
       break;

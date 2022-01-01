@@ -1,6 +1,6 @@
 import * as shared from "./shared.js";
 
-let running;
+let inProgress;
 
 const stopBtn = document.querySelector("#stop");
 const unfollowAllBtn = document.querySelector("#unfollow-all");
@@ -11,9 +11,15 @@ const unfollowNotFollowingBtn = document.querySelector(
 const unfollowAllBtnText = unfollowAllBtn.textContent;
 const unfollowNotFollowingBtnText = unfollowNotFollowingBtn.textContent;
 
+window.addEventListener("load", () => {
+  shared.sendMessage({ type: shared.IN_PROGRESS }).then((value) => {
+    if (value) rerenderButtons();
+  });
+});
+
 const rerenderButtons = (reset) => {
   if (reset) {
-    running = false;
+    inProgress = false;
 
     unfollowAllBtn.textContent = unfollowAllBtnText;
     unfollowNotFollowingBtn.textContent = unfollowNotFollowingBtnText;
@@ -21,7 +27,7 @@ const rerenderButtons = (reset) => {
     unfollowAllBtn.disabled = false;
     unfollowNotFollowingBtn.disabled = false;
   } else {
-    running = true;
+    inProgress = true;
 
     unfollowAllBtn.textContent = "🧙🏻‍♂️...";
     unfollowNotFollowingBtn.textContent = "🧙🏻‍♂️...";
@@ -32,13 +38,13 @@ const rerenderButtons = (reset) => {
 };
 
 unfollowAllBtn.addEventListener("click", () => {
-  if (running) return;
+  if (inProgress) return;
   rerenderButtons();
   shared.sendMessage({ type: shared.UNFOLLOW_ALL });
 });
 
 unfollowNotFollowingBtn.addEventListener("click", () => {
-  if (running) return;
+  if (inProgress) return;
   rerenderButtons();
   shared.sendMessage({ type: shared.UNFOLLOW_NOT_FOLLOWING });
 });

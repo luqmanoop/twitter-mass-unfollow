@@ -19,9 +19,7 @@ const getFollowings = () =>
     document.querySelectorAll('[aria-label~="Following"][role=button]')
   );
 
-const filterFollowings = async (followings, unfollowAll = false) => {
-  if (unfollowAll) return followings;
-
+const filterFollowings = async (followings, unfollowNotFollowing) => {
   const whitelistedUsers = await shared.storage.get(shared.whiteListedUsersKey);
 
   const toUnfollow = followings.filter((following) => {
@@ -34,7 +32,18 @@ const filterFollowings = async (followings, unfollowAll = false) => {
     return !whitelistedUsers.includes(username);
   });
 
-  return toUnfollow;
+  return unfollowNotFollowing
+    ? toUnfollow.filter((following) => {
+        const elem = Array.from(
+          following.parentElement.parentElement.firstElementChild.querySelectorAll(
+            "span"
+          )
+        ).slice(-1)[0];
+
+        if (!elem) return true;
+        return !elem.textContent.toLowerCase().includes("follows you");
+      })
+    : toUnfollow;
 };
 
 const confirmUnfollow = () => {
@@ -47,11 +56,10 @@ const unfollow = (unfollowButtons = []) => {
   unfollowButtons.forEach((unfollowButton) => {
     // unfollowButton.click();
     // confirmUnfollow();
-    console.log('confirm unfollow')
   });
 };
 
-const scroll = async () => {
+const scroll = async (notFollowing) => {
   if (previousScrollHeight !== html.scrollHeight) {
     previousScrollHeight = html.scrollHeight;
 
@@ -59,7 +67,7 @@ const scroll = async () => {
     const scrollBy = followingsContainer.clientHeight;
 
     const followings = getFollowings();
-    const accountsToUnffolow = await filterFollowings(followings);
+    const accountsToUnffolow = await filterFollowings(followings, notFollowing);
 
     unfollow(accountsToUnffolow);
 
@@ -69,7 +77,7 @@ const scroll = async () => {
     });
 
     await delay(3000);
-    scroll();
+    scroll(notFollowing);
   }
 };
 
@@ -77,6 +85,9 @@ chrome.runtime.onMessage.addListener((message, sender, reply) => {
   switch (message.type) {
     case shared.UNFOLLOW_ALL:
       scroll();
+      return;
+    case shared.UNFOLLOW_NOT_FOLLOWING:
+      scroll(true);
       return;
     default:
       break;

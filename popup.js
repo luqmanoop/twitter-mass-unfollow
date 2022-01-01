@@ -1,7 +1,14 @@
 import * as shared from "./shared.js";
 
-const btn = document.querySelector("#btn");
+const unfollowAllBtn = document.querySelector("#unfollow-all");
+const unfollowNotFollowingBtn = document.querySelector(
+  "#unfollow-not-following"
+);
 
-btn.addEventListener("click", () => {
+unfollowAllBtn.addEventListener("click", () => {
   shared.sendMessage({ type: shared.UNFOLLOW_ALL });
+});
+
+unfollowNotFollowingBtn.addEventListener("click", () => {
+  shared.sendMessage({ type: shared.UNFOLLOW_NOT_FOLLOWING });
 });

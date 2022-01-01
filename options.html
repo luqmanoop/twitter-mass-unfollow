@@ -10,32 +10,36 @@
         padding: 0;
         box-sizing: border-box;
       }
+      html,
       body {
         font-size: 10px;
-        max-width: 600px;
-        margin: 20px auto;
+      }
+
+      body {
+        max-width: 60rem;
+        margin: 2rem auto;
       }
 
       form {
         display: flex;
         flex-direction: column;
-        align-items:flex-start;
+        align-items: flex-start;
         width: 100%;
       }
 
       h1 {
-        font-size: 2.2rem;
+        font-size: 4.2rem;
         text-align: center;
         margin-bottom: 1rem;
       }
 
       label {
         display: block;
-        font-size: 1.6rem;
+        font-size: 2rem;
       }
 
       span {
-        font-size: 0.8rem;
+        font-size: 1.4rem;
         color: #a0a0a0;
       }
 
@@ -43,7 +47,7 @@
         resize: none;
         margin: 0.4rem 0 1rem;
         padding: 0.6rem;
-        font-size: 1.2rem;
+        font-size: 1.8rem;
         height: 20rem;
         width: 100%;
       }
@@ -57,17 +61,18 @@
         letter-spacing: 0.3rem;
         font-weight: bold;
         cursor: pointer;
-        border-radius: .3rem;
+        border-radius: 0.3rem;
         width: 100%;
+        font-size: 2rem;
       }
 
       button:hover {
-        background-color: #38244b;
+        background-color: #412e52;
       }
 
       .notification {
         font-size: 1.2rem;
-        color: #04AA6D;
+        color: #04aa6d;
         margin-bottom: 1rem;
         text-align: center;
         width: 100%;
@@ -82,7 +87,10 @@
     <form>
       <p class="notification">Ok! These users won't be unfollowed!</p>
       <label for="usernames">Exclude users</label>
-      <span>Add comma separated Twitter handles that should not be unfollowed e.g. jack, naval</span>
+      <span
+        >Add comma separated Twitter handles that should not be unfollowed e.g.
+        jack, naval</span
+      >
       <textarea id="usernames" placeholder="jack, naval"></textarea>
       <button type="submit">Save</button>
     </form>

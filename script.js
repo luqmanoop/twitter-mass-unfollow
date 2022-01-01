@@ -54,7 +54,7 @@ const unfollow = async (unfollowButtons = []) => {
   for (const unfollowButton of unfollowButtons) {
     unfollowButton.click();
     confirmUnfollow();
-    await shared.delay(200);
+    await shared.delay(50);
   }
 };
 

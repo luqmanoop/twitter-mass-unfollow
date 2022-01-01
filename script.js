@@ -61,7 +61,11 @@ const unfollow = (unfollowButtons = []) => {
 };
 
 const scroll = async (notFollowing) => {
-  if (previousScrollHeight !== html.scrollHeight && !stop) {
+  if (
+    previousScrollHeight !== html.scrollHeight &&
+    !stop &&
+    shared.isExtensionPage()
+  ) {
     previousScrollHeight = html.scrollHeight;
 
     const followingsContainer = getFollowingsContainer();

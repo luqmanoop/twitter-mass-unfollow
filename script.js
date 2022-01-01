@@ -54,7 +54,7 @@ const unfollow = async (unfollowButtons = []) => {
   for (const unfollowButton of unfollowButtons) {
     unfollowButton.click();
     confirmUnfollow();
-    await shared.delay(300);
+    await shared.delay(200);
   }
 };
 
@@ -79,7 +79,7 @@ const scroll = async (notFollowing) => {
       behavior: "smooth",
     });
 
-    await shared.delay(4000);
+    await shared.delay(3000);
     scroll(notFollowing);
   }
 };

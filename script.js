@@ -1,5 +1,6 @@
 const html = document.querySelector("html");
 let previousScrollHeight = 0;
+let stop;
 
 let shared = {}; // shared.js module
 (async () => {
@@ -60,7 +61,7 @@ const unfollow = (unfollowButtons = []) => {
 };
 
 const scroll = async (notFollowing) => {
-  if (previousScrollHeight !== html.scrollHeight) {
+  if (previousScrollHeight !== html.scrollHeight && !stop) {
     previousScrollHeight = html.scrollHeight;
 
     const followingsContainer = getFollowingsContainer();
@@ -84,10 +85,15 @@ const scroll = async (notFollowing) => {
 chrome.runtime.onMessage.addListener((message, sender, reply) => {
   switch (message.type) {
     case shared.UNFOLLOW_ALL:
+      stop = false;
       scroll();
       return;
     case shared.UNFOLLOW_NOT_FOLLOWING:
+      stop = false;
       scroll(true);
+      return;
+    case shared.STOP:
+      stop = true;
       return;
     default:
       break;

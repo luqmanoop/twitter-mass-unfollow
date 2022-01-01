@@ -1,6 +1,7 @@
 /* messaging events */
 export const UNFOLLOW_ALL = "UNFOLLOW_ALL";
 export const UNFOLLOW_NOT_FOLLOWING = "UNFOLLOW_NOT_FOLLOWING";
+export const STOP = "STOP";
 /* --- end --- */
 
 export const whiteListedUsersKey = "twitter-mass-unfollow-whitelisted";

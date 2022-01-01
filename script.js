@@ -53,11 +53,12 @@ const confirmUnfollow = () => {
     .click();
 };
 
-const unfollow = (unfollowButtons = []) => {
-  unfollowButtons.forEach((unfollowButton) => {
+const unfollow = async (unfollowButtons = []) => {
+  for (const unfollowButton of unfollowButtons) {
     unfollowButton.click();
     confirmUnfollow();
-  });
+    await delay(300);
+  }
 };
 
 const scroll = async (notFollowing) => {
@@ -74,7 +75,7 @@ const scroll = async (notFollowing) => {
     const followings = getFollowings();
     const accountsToUnffolow = await filterFollowings(followings, notFollowing);
 
-    unfollow(accountsToUnffolow);
+    await unfollow(accountsToUnffolow);
 
     html.scroll({
       top: followingsContainer.offsetHeight + scrollBy,

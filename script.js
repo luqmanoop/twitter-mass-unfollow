@@ -8,9 +8,6 @@ let shared = {}; // shared.js module
   shared = await import(sharedSrc);
 })();
 
-const delay = async (duration = 1000) =>
-  new Promise((resolve) => setTimeout(resolve, duration));
-
 const getFollowingsContainer = () => {
   return document.querySelector('[aria-label="Timeline: Following"]');
 };
@@ -57,7 +54,7 @@ const unfollow = async (unfollowButtons = []) => {
   for (const unfollowButton of unfollowButtons) {
     unfollowButton.click();
     confirmUnfollow();
-    await delay(300);
+    await shared.delay(300);
   }
 };
 
@@ -82,7 +79,7 @@ const scroll = async (notFollowing) => {
       behavior: "smooth",
     });
 
-    await delay(4000);
+    await shared.delay(4000);
     scroll(notFollowing);
   }
 };

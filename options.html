@@ -8,6 +8,7 @@
       * {
         margin: 0;
         padding: 0;
+        box-sizing: border-box;
       }
       body {
         font-size: 10px;
@@ -18,7 +19,8 @@
       form {
         display: flex;
         flex-direction: column;
-        width: auto;
+        align-items:flex-start;
+        width: 100%;
       }
 
       h1 {
@@ -43,6 +45,7 @@
         padding: 0.6rem;
         font-size: 1.2rem;
         height: 20rem;
+        width: 100%;
       }
 
       button {
@@ -54,10 +57,22 @@
         letter-spacing: 0.3rem;
         font-weight: bold;
         cursor: pointer;
+        border-radius: .3rem;
+        width: 100%;
       }
 
       button:hover {
         background-color: #38244b;
+      }
+
+      .notification {
+        font-size: 1.2rem;
+        color: #04AA6D;
+        margin-bottom: 1rem;
+        text-align: center;
+        width: 100%;
+        font-weight: bold;
+        display: none;
       }
     </style>
   </head>
@@ -65,6 +80,7 @@
     <h1>Twitter Mass Unfollow</h1>
 
     <form>
+      <p class="notification">Ok! These users won't be unfollowed!</p>
       <label for="usernames">Exclude users</label>
       <span>Add comma separated Twitter handles that should not be unfollowed e.g. jack, naval</span>
       <textarea id="usernames" placeholder="jack, naval"></textarea>

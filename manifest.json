@@ -3,6 +3,12 @@
   "description": "A simple (configurable) way to mass unfollow your Twitter followings",
   "version": "1",
   "manifest_version": 3,
+  "icons": {
+    "16": "images/16.png",
+    "32": "images/32.png",
+    "48": "images/48.png",
+    "128": "images/128.png"
+  },
   "action": {
     "default_popup": "popup.html"
   },

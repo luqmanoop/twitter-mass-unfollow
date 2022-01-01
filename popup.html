@@ -33,7 +33,7 @@
       }
       .actions {
         display: flex;
-        min-width: 20rem;
+        min-width: 21rem;
         gap: 0.5rem;
         /* display: flex; */
         /* justify-content: space-between; */
@@ -41,7 +41,6 @@
 
       button {
         border: none;
-        padding: 0.3rem;
         flex: 1;
         background-color: #3b2a4d;
         color: #fff;
@@ -49,17 +48,27 @@
         cursor: pointer;
         transform: scale(1);
         transition: all;
-        font-size: 1rem;
+        font-size: 0.8rem;
         user-select: none;
         -webkit-user-select: none;
+        text-transform: uppercase;
+        padding: 0.6rem 0;
       }
 
       button:nth-child(2) {
         flex: 2;
       }
 
+      button:last-child {
+        background-color: #c93939;
+      }
+
       button:hover {
         background-color: #412e52e9;
+      }
+
+      button:last-child:hover {
+        background-color: #c93939;
       }
 
       button:active {
@@ -81,8 +90,13 @@
         <a href="/options.html" target="_blank">options page</a>
       </p>
       <div class="actions">
-        <button id="unfollow-all">start</button>
-        <button id="unfollow-not-following">not following</button>
+        <button id="unfollow-all" title="Unfollow all accounts">all</button>
+        <button
+          id="unfollow-not-following"
+          title="Unfollow accounts you follow but not following you"
+        >
+          not following you
+        </button>
         <button id="stop">stop</button>
       </div>
     </main>

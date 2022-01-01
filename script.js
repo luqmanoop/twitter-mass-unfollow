@@ -52,8 +52,8 @@ const confirmUnfollow = () => {
 
 const unfollow = async (unfollowButtons = []) => {
   for (const unfollowButton of unfollowButtons) {
-    unfollowButton.click();
-    confirmUnfollow();
+    // unfollowButton.click();
+    // confirmUnfollow();
     await shared.delay(50);
   }
 };
@@ -84,15 +84,28 @@ const scroll = async (notFollowing) => {
   }
 };
 
+const startTimer = () => {
+  shared.storage.get(shared.timerKey).then((autoStop) => {
+    console.log(autoStop);
+    if (autoStop) {
+      setTimeout(() => {
+        stop = true;
+      }, 1000 * 60);
+    }
+  });
+};
+
 chrome.runtime.onMessage.addListener((message, sender, reply) => {
   switch (message.type) {
     case shared.UNFOLLOW_ALL:
       stop = false;
       scroll();
+      startTimer();
       return;
     case shared.UNFOLLOW_NOT_FOLLOWING:
       stop = false;
       scroll(true);
+      startTimer();
       return;
     case shared.STOP:
       stop = true;

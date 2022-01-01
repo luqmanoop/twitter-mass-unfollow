@@ -7,11 +7,11 @@ shared.storage.get(shared.whiteListedUsersKey).then((whitelistedUsers) => {
   document.querySelector("textarea").value = whitelistedUsers.join(", ");
 });
 
-const showSavedNotification = async () => {
+const showNotification = async () => {
   const notification = document.querySelector(".notification");
-  notification.style.display = "block";
+  notification.style.visibility = "visible";
   await shared.delay(1000);
-  notification.style.display = "none";
+  notification.style.visibility = "hidden";
 };
 
 form.addEventListener("submit", (e) => {
@@ -23,5 +23,5 @@ form.addEventListener("submit", (e) => {
     .map((username) => username.trim().toLowerCase());
   shared.storage
     .set(shared.whiteListedUsersKey, whitelistedUsers)
-    .then(showSavedNotification);
+    .then(showNotification);
 });

@@ -11,7 +11,7 @@ const unfollowNotFollowingBtn = document.querySelector(
 const unfollowAllBtnText = unfollowAllBtn.textContent;
 const unfollowNotFollowingBtnText = unfollowNotFollowingBtn.textContent;
 
-const setButtonsText = (reset) => {
+const rerenderButtons = (reset) => {
   if (reset) {
     running = false;
 
@@ -22,7 +22,7 @@ const setButtonsText = (reset) => {
     unfollowNotFollowingBtn.disabled = false;
   } else {
     running = true;
-    
+
     unfollowAllBtn.textContent = "🧙🏻‍♂️...";
     unfollowNotFollowingBtn.textContent = "🧙🏻‍♂️...";
 
@@ -33,17 +33,17 @@ const setButtonsText = (reset) => {
 
 unfollowAllBtn.addEventListener("click", () => {
   if (running) return;
-  setButtonsText();
+  rerenderButtons();
   shared.sendMessage({ type: shared.UNFOLLOW_ALL });
 });
 
 unfollowNotFollowingBtn.addEventListener("click", () => {
   if (running) return;
-  setButtonsText();
+  rerenderButtons();
   shared.sendMessage({ type: shared.UNFOLLOW_NOT_FOLLOWING });
 });
 
 stopBtn.addEventListener("click", () => {
-  setButtonsText(true);
+  rerenderButtons(true);
   shared.sendMessage({ type: shared.STOP });
 });

@@ -25,7 +25,7 @@
       "matches": ["<all_urls>"]
     }
   ],
-  "permissions": ["storage", "declarativeContent"],
+  "permissions": ["storage", "declarativeContent", "tabs"],
   "background": {
     "service_worker": "background.js"
   }

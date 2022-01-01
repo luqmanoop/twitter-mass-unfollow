@@ -1,6 +1,14 @@
 import * as shared from "./shared.js";
 
 const form = document.querySelector("form");
+const timer = document.querySelector("#timer");
+shared.storage.get(shared.timerKey).then((value) => {
+  timer.checked = value;
+});
+
+timer.addEventListener("change", (e) => {
+  shared.storage.set(shared.timerKey, e.target.checked);
+});
 
 shared.storage.get(shared.whiteListedUsersKey).then((whitelistedUsers) => {
   if (!whitelistedUsers) return;

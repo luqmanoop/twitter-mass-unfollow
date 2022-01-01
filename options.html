@@ -1,109 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        font-size: 10px;
-      }
 
-      body {
-        max-width: 60rem;
-        margin: 2rem auto;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-      form {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-        position: relative;
-      }
+    html,
+    body {
+      font-size: 10px;
+    }
 
-      h1 {
-        font-size: 4.2rem;
-        text-align: center;
-        margin-bottom: 1rem;
-      }
+    body {
+      max-width: 60rem;
+      margin: 2rem auto;
+    }
 
-      label {
-        display: block;
-        font-size: 2rem;
-      }
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+      position: relative;
+    }
 
-      span {
-        font-size: 1.4rem;
-        color: #a0a0a0;
-      }
+    h1 {
+      font-size: 4.2rem;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
 
-      textarea {
-        resize: none;
-        margin: 0.4rem 0 1rem;
-        padding: 0.6rem;
-        font-size: 1.8rem;
-        height: 20rem;
-        width: 100%;
-      }
+    label {
+      display: block;
+      font-size: 2rem;
+    }
 
-      button {
-        padding: 1rem;
-        text-transform: uppercase;
-        border: none;
-        background-color: #1da1f2;
-        color: #e3e3e3;
-        letter-spacing: 0.3rem;
-        font-weight: bold;
-        cursor: pointer;
-        border-radius: 0.3rem;
-        width: 100%;
-        font-size: 2rem;
-        box-shadow: -0.4rem 0.6rem #0277bd;
-        transform: scale(1);
-        transition: all;
-      }
+    span {
+      font-size: 1.4rem;
+      color: #a0a0a0;
+    }
 
-      button:hover {
-        background-color: #0288d1;
-      }
+    #timer {
+      position: relative;
+      top: 0.2rem;
+    }
 
-      button:active {
-        transform: scale(0.98);
-      }
+    label span {
+      user-select: none;
+      -webkit-user-select: none;
+    }
 
-      .notification {
-        font-size: 1.2rem;
-        color: #04aa6d;
-        margin-bottom: 1rem;
-        text-align: center;
-        width: 100%;
-        font-weight: bold;
-        visibility: hidden;
-        position: absolute;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Twitter Mass Unfollow</h1>
+    textarea {
+      resize: none;
+      margin: 0.4rem 0 1rem;
+      padding: 0.6rem;
+      font-size: 1.8rem;
+      height: 20rem;
+      width: 100%;
+    }
 
-    <form>
-      <p class="notification">Ok! These users won't be unfollowed!</p>
-      <label for="usernames">Exclude users</label>
-      <span
-        >Add comma separated Twitter handles that should not be unfollowed e.g.
-        jack, naval</span
-      >
-      <textarea id="usernames" placeholder="jack, naval"></textarea>
-      <button type="submit">Save</button>
-    </form>
+    button {
+      padding: 1rem;
+      text-transform: uppercase;
+      border: none;
+      background-color: #1da1f2;
+      color: #e3e3e3;
+      letter-spacing: 0.3rem;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 0.3rem;
+      width: 100%;
+      font-size: 2rem;
+      box-shadow: -0.4rem 0.6rem #0277bd;
+      transform: scale(1);
+      transition: all;
+      margin-top: 1rem;
+    }
 
-    <script type="module" src="options.js"></script>
-  </body>
+    button:hover {
+      background-color: #0288d1;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .notification {
+      font-size: 1.2rem;
+      color: #04aa6d;
+      margin-bottom: 1rem;
+      text-align: center;
+      width: 100%;
+      font-weight: bold;
+      visibility: hidden;
+      position: absolute;
+    }
+
+    .info {
+      background-color: #000000;
+      display: block;
+      padding: 0.6rem;
+      margin-top: 0.6rem;
+    }
+
+    .info a {
+      color: #2c6ca5;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Twitter Mass Unfollow</h1>
+
+  <form>
+    <p class="notification">Ok! These users won't be unfollowed!</p>
+    <label for="usernames">Exclude users</label>
+    <span>Add comma separated Twitter handles that should not be unfollowed e.g.
+      jack, naval</span>
+    <textarea id="usernames" placeholder="jack, naval"></textarea>
+    <div>
+      <label for="timer"><input id="timer" type="checkbox" />
+        <span>stop after 2 minutes</span></label>
+      <span class="info">This is a safety measure to not violate
+        <a href="https://help.twitter.com/en/using-twitter/twitter-follow-limit" target="_blank">Twitter Rule</a>
+        which could lead to having your account restricted by Twitter. <b>If unchecked, you'd have to manually "STOP"
+          the
+          unfollow process as you see fit.</b></span>
+    </div>
+
+    <button type="submit">Save</button>
+  </form>
+
+  <script type="module" src="options.js"></script>
+</body>
+
 </html>

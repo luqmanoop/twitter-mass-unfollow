@@ -5,6 +5,7 @@ export const STOP = "STOP";
 /* --- end --- */
 
 export const whiteListedUsersKey = "twitter-mass-unfollow-whitelisted";
+export const timerKey = "twitter-mass-unfollow-timer";
 
 export const sendMessage = async (msg) => {
   const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -26,12 +27,18 @@ export const isExtensionPage = () => {
 
 export const storage = {
   set: async (key, value) => {
-    return chrome.storage.sync.set({ [key]: value }).then(() => value);
+    return chrome.storage.sync
+      .set({ [key]: value })
+      .then(() => value)
+      .catch(console.log);
   },
   get: async (key) => {
-    return chrome.storage.sync.get(key).then((result) => {
-      return result[key];
-    });
+    return chrome.storage.sync
+      .get(key)
+      .then((result) => {
+        return result[key];
+      })
+      .catch(console.log);
   },
 };
 

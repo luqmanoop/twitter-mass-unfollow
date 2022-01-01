@@ -1,24 +1,25 @@
-let shared = {};
+const html = document.querySelector("html");
+let previousScrollHeight = 0;
+
+let shared = {}; // shared.js module
 (async () => {
   const sharedSrc = chrome.runtime.getURL("shared.js");
   shared = await import(sharedSrc);
 })();
 
-let scrollHandle;
-const cleanupHandle = setInterval(() => cleanup(), 1500);
+const delay = async (duration = 1000) =>
+  new Promise((resolve) => setTimeout(resolve, duration));
 
-const cleanup = () => {
-  if (!shared.isExtensionPage() && scrollHandle) {
-    clearInterval(scrollHandle);
-    clearInterval(cleanupHandle);
-  }
+const getFollowingsContainer = () => {
+  return document.querySelector('[aria-label="Timeline: Following"]');
 };
 
-const getAccountsToUnfollow = async (unfollowAll = false) => {
-  const followings = Array.from(
+const getFollowings = () =>
+  Array.from(
     document.querySelectorAll('[aria-label~="Following"][role=button]')
   );
 
+const filterFollowings = async (followings, unfollowAll = false) => {
   if (unfollowAll) return followings;
 
   const whitelistedUsers = await shared.storage.get(shared.whiteListedUsersKey);
@@ -42,22 +43,35 @@ const confirmUnfollow = () => {
     .click();
 };
 
-async function scroll() {
-  const html = document.querySelector("html");
-  const timelineFollowing = document.querySelector(
-    '[aria-label="Timeline: Following"]'
-  );
-  const scrollBy = timelineFollowing.clientHeight;
+const unfollow = (unfollowButtons = []) => {
+  unfollowButtons.forEach((unfollowButton) => {
+    // unfollowButton.click();
+    // confirmUnfollow();
+    console.log('confirm unfollow')
+  });
+};
 
-  if (scrollHandle) clearInterval(scrollHandle);
-  const accountsToUnffolow = await getAccountsToUnfollow();
-  //   scrollHandle = setInterval(() => {
-  //     html.scroll({
-  //       top: timelineFollowing.offsetHeight + scrollBy,
-  //       behavior: "smooth",
-  //     });
-  //   }, 3000);
-}
+const scroll = async () => {
+  if (previousScrollHeight !== html.scrollHeight) {
+    previousScrollHeight = html.scrollHeight;
+
+    const followingsContainer = getFollowingsContainer();
+    const scrollBy = followingsContainer.clientHeight;
+
+    const followings = getFollowings();
+    const accountsToUnffolow = await filterFollowings(followings);
+
+    unfollow(accountsToUnffolow);
+
+    html.scroll({
+      top: followingsContainer.offsetHeight + scrollBy,
+      behavior: "smooth",
+    });
+
+    await delay(3000);
+    scroll();
+  }
+};
 
 chrome.runtime.onMessage.addListener((message, sender, reply) => {
   switch (message.type) {

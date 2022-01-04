@@ -1,20 +1,8 @@
 const html = document.querySelector("html");
-let img = document.createElement("img");
-img.style.position = "fixed";
-img.style.right = "20px";
-img.style.bottom = "50px";
-img.style.width = "80px";
-img.alt = "running";
-img.style.zIndex = 10;
-img.style.visibility = "hidden";
-img.src =
-  "https://github.com/codeshifu/assets/blob/main/gifs/eevee.gif?raw=true";
-
-document.body.appendChild(img);
-
 let timerHandle;
 let previousScrollHeight = 0;
 let stop;
+const unfollowedUsers = [];
 
 let shared = {}; // shared.js module
 (async () => {
@@ -22,8 +10,26 @@ let shared = {}; // shared.js module
   shared = await import(sharedSrc);
 })();
 
-const showImage = () => {
-  img.style.visibility = "visible";
+const tmuWrapper = document.createElement("div");
+tmuWrapper.className = "tmu-wrapper";
+
+let totalUnfollowed = document.createElement("h1");
+totalUnfollowed.textContent = -1230;
+totalUnfollowed.className = "tmu-counter";
+
+let img = document.createElement("img");
+img.className = "tmu-img";
+img.alt = "running";
+img.src =
+  "https://github.com/codeshifu/assets/blob/main/gifs/eevee.gif?raw=true";
+
+tmuWrapper.appendChild(totalUnfollowed);
+tmuWrapper.appendChild(img);
+
+document.body.appendChild(tmuWrapper);
+
+const showContentInDOM = () => {
+  tmuWrapper.style.visibility = "visible";
 };
 
 const getFollowingsContainer = () => {
@@ -35,16 +41,19 @@ const getFollowings = () =>
     document.querySelectorAll('[aria-label~="Following"][role=button]')
   );
 
+const getUsername = (followingBtn) => {
+  return followingBtn
+    .getAttribute("aria-label")
+    .toLowerCase()
+    .replace("following @", "");
+};
+
 const filterFollowings = async (followings, unfollowNotFollowing) => {
   const whitelistedUsers = await shared.storage.get(shared.whiteListedUsersKey);
 
-  const toUnfollow = followings.filter((following) => {
+  const toUnfollow = followings.filter((followingBtn) => {
     if (!whitelistedUsers) return true;
-    const username = following
-      .getAttribute("aria-label")
-      .toLowerCase()
-      .replace("following @", "");
-
+    const username = getUsername(followingBtn);
     return !whitelistedUsers.includes(username);
   });
 
@@ -68,16 +77,22 @@ const confirmUnfollow = () => {
     .click();
 };
 
-const unfollow = async (unfollowButtons = [], demo) => {
-  for (const unfollowButton of unfollowButtons) {
-    if (demo) {
-      unfollowButton.firstElementChild.firstElementChild.firstElementChild.textContent =
-        "Follow";
-    } else {
-      unfollowButton.click();
-      confirmUnfollow();
+const unfollow = async (followingButtons = [], demo) => {
+  for (const followingButton of followingButtons) {
+    const username = getUsername(followingButton);
+    if (!unfollowedUsers.includes(username)) {
+      unfollowedUsers.push(username);
+      totalUnfollowed.textContent = `-${unfollowedUsers.length}`;
+
+      if (demo) {
+        followingButton.firstElementChild.firstElementChild.firstElementChild.textContent =
+          "Follow";
+      } else {
+        followingButton.click();
+        confirmUnfollow();
+      }
+      await shared.delay(50);
     }
-    await shared.delay(50);
   }
 };
 
@@ -115,13 +130,13 @@ const stopUnfollowing = async () => {
   if (timerHandle) clearInterval(timerHandle);
 
   const shouldReload = await shared.storage.get(shared.reloadOnStoppedKey);
-  if (shouldReload) {
-    img.src =
-      "https://github.com/codeshifu/assets/blob/main/gifs/mario_wave.gif?raw=true";
-
-    await shared.delay(3000);
-    window.location.reload();
-  }
+  img.src =
+    "https://github.com/codeshifu/assets/blob/main/gifs/mario_wave.gif?raw=true";
+  await shared.delay(2000);
+  if (shouldReload) window.location.reload();
+  tmuWrapper.style.visibility = "hidden";
+  img.src =
+    "https://github.com/codeshifu/assets/blob/main/gifs/eevee.gif?raw=true";
 };
 
 const startTimer = () => {
@@ -134,7 +149,7 @@ const startTimer = () => {
 
 const run = ({ unfollowNotFollowing, demo } = {}) => {
   stop = false;
-  showImage();
+  showContentInDOM();
   scrollFollowingList({ unfollowNotFollowing, demo });
   startTimer();
 };

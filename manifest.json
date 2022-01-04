@@ -16,7 +16,8 @@
   "content_scripts": [
     {
       "matches": ["https://*.twitter.com/*/following"],
-      "js": ["script.js"]
+      "js": ["script.js"],
+      "css": ["script.css"]
     }
   ],
   "web_accessible_resources": [

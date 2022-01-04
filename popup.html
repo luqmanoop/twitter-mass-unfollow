@@ -1,107 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-      * {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        font-size: 66%;
-      }
-      body {
-        padding: 0.8rem;
-        width: 100%;
-      }
-      h1 {
-        font-size: 1.2rem;
-      }
 
-      p {
-        margin: 0.2rem 0 0.6rem;
-        color: #a0a0a0;
-        font-size: 0.8rem;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
 
-      a {
-        color: #2c6ca5;
-      }
-      .actions {
-        display: flex;
-        min-width: 21rem;
-        gap: 0.5rem;
-        /* display: flex; */
-        /* justify-content: space-between; */
-      }
+    html,
+    body {
+      font-size: 66%;
+    }
 
-      button {
-        border: none;
-        flex: 1;
-        background-color: #1da1f2;
-        color: #fff;
-        border-radius: 0.3rem;
-        cursor: pointer;
-        transform: scale(1);
-        transition: all;
-        font-size: 0.8rem;
-        user-select: none;
-        -webkit-user-select: none;
-        text-transform: uppercase;
-        box-shadow: -0.2rem 0.3rem #0277bd;
-        padding: 0.6rem 0;
-      }
+    body {
+      padding: 0.8rem;
+      width: 100%;
+    }
 
-      button:nth-child(2) {
-        flex: 2;
-      }
+    h1 {
+      font-size: 1.4rem;
+    }
 
-      button:last-child {
-        background-color: #c62828;
-        box-shadow: -0.2rem 0.3rem #610000;
-      }
+    p {
+      margin: 0.2rem 0 0.6rem;
+      color: #a0a0a0;
+      font-size: 0.8rem;
+    }
 
-      button:hover {
-        background-color: #0288D1;
-      }
+    a {
+      color: #2c6ca5;
+    }
 
-      button:last-child:hover {
-        background-color: #c62828;
-      }
+    .actions {
+      display: flex;
+      min-width: 27rem;
+      gap: 0.5rem;
+      /* display: flex; */
+      /* justify-content: space-between; */
+    }
 
-      button:active {
-        transform: scale(0.98);
-      }
+    button {
+      border: none;
+      flex: 1;
+      background-color: #1da1f2;
+      color: #fff;
+      border-radius: 0.3rem;
+      cursor: pointer;
+      transform: scale(1);
+      transition: all;
+      font-size: 0.8rem;
+      user-select: none;
+      -webkit-user-select: none;
+      text-transform: uppercase;
+      box-shadow: -0.2rem 0.3rem #0277bd;
+      padding: 0.6rem 0;
+      font-weight: bold;
+    }
+    
+    button#demo {
+      background-color: transparent;
+      border: 1px solid #2C3E50;
+      color: #333;
+      box-shadow: -0.2rem 0.3rem #333;
+    }
 
-      button:disabled {
-        cursor: not-allowed;
-        transform: scale(1);
-        background-color: #0277bd;
-      }
-    </style>
-  </head>
-  <body>
-    <main>
-      <h1>Mass unfollow users on this page</h1>
-      <p>
-        To exclude specific users, visit the
-        <a href="/options.html" target="_blank">options page</a>
-      </p>
-      <div class="actions">
-        <button id="unfollow-all" title="Unfollow all accounts">all</button>
-        <button
-          id="unfollow-not-following"
-          title="Unfollow accounts you follow but not following you"
-        >
-          not following you
-        </button>
-        <button id="stop">stop</button>
-      </div>
-    </main>
-    <script type="module" src="popup.js"></script>
-  </body>
+    button#unfollow-not-following {
+      flex: 2;
+    }
+
+    button#stop {
+      background-color: #c62828;
+      box-shadow: -0.2rem 0.3rem #610000;
+    }
+
+    button:hover {
+      background-color: #0288D1;
+    }
+
+    button#stop:hover {
+      background-color: #c62828;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      transform: scale(1);
+      background-color: #0277bd;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>Mass unfollow users on this page</h1>
+    <p>
+      To exclude specific users, visit the
+      <a href="/options.html" target="_blank">options page</a>
+    </p>
+    <div class="actions">
+      <button id="demo" title="See how it works. This doesn't unfollow anyone">demo</button>
+      <button id="unfollow-all" title="Unfollow all accounts">all</button>
+      <button id="unfollow-not-following" title="Unfollow accounts you follow but not following you">
+        not following you
+      </button>
+      <button id="stop">stop</button>
+    </div>
+  </main>
+  <script type="module" src="popup.js"></script>
+</body>
+
 </html>

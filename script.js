@@ -52,15 +52,20 @@ const confirmUnfollow = () => {
     .click();
 };
 
-const unfollow = async (unfollowButtons = []) => {
+const unfollow = async (unfollowButtons = [], demo) => {
   for (const unfollowButton of unfollowButtons) {
-    unfollowButton.click();
-    confirmUnfollow();
+    if (demo) {
+      unfollowButton.firstElementChild.firstElementChild.firstElementChild.textContent =
+        "Follow";
+    } else {
+      unfollowButton.click();
+      confirmUnfollow();
+    }
     await shared.delay(50);
   }
 };
 
-const scroll = async (notFollowing) => {
+const scrollFollowingList = async ({ unfollowNotFollowing, demo } = {}) => {
   if (
     previousScrollHeight !== html.scrollHeight &&
     !stop &&
@@ -72,9 +77,12 @@ const scroll = async (notFollowing) => {
     const scrollBy = followingsContainer.clientHeight;
 
     const followings = getFollowings();
-    const accountsToUnffolow = await filterFollowings(followings, notFollowing);
+    const accountsToUnffolow = await filterFollowings(
+      followings,
+      unfollowNotFollowing
+    );
 
-    await unfollow(accountsToUnffolow);
+    await unfollow(accountsToUnffolow, demo);
 
     html.scroll({
       top: followingsContainer.offsetHeight + scrollBy,
@@ -82,13 +90,22 @@ const scroll = async (notFollowing) => {
     });
 
     await shared.delay(3000);
-    scroll(notFollowing);
+    scrollFollowingList({ unfollowNotFollowing, demo });
+  } else {
+    console.log(
+      previousScrollHeight !== html.scrollHeight,
+      stop,
+      shared.isExtensionPage()
+    );
   }
 };
 
 const stopUnfollowing = () => {
   stop = true;
   if (timerHandle) clearInterval(timerHandle);
+  setTimeout(() => {
+    window.location.reload(); // TODO: config. reload on stop
+  }, 1000);
 };
 
 const startTimer = () => {
@@ -99,22 +116,27 @@ const startTimer = () => {
   });
 };
 
+const run = ({ unfollowNotFollowing, demo } = {}) => {
+  stop = false;
+  scrollFollowingList({ unfollowNotFollowing, demo });
+  startTimer();
+};
+
 chrome.runtime.onMessage.addListener((message, sender, reply) => {
   switch (message.type) {
     case shared.UNFOLLOW_ALL:
-      stop = false;
-      scroll();
-      startTimer();
+      run();
       return;
     case shared.UNFOLLOW_NOT_FOLLOWING:
-      stop = false;
-      scroll(true);
-      startTimer();
+      run({ unfollowNotFollowing: true });
+      return;
+    case shared.DEMO:
+      run({ demo: true });
       return;
     case shared.STOP:
       stopUnfollowing();
       return;
-    case shared.IN_PROGRESS:
+    case shared.CHECK_IN_PROGRESS:
       reply({ payload: previousScrollHeight !== 0 && !stop });
       return;
     default:

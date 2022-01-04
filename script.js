@@ -1,4 +1,16 @@
 const html = document.querySelector("html");
+let img = document.createElement("img");
+img.style.position = "fixed";
+img.style.right = "20px";
+img.style.bottom = "50px";
+img.style.width = "80px";
+img.alt = "running";
+img.style.zIndex = 10;
+img.style.visibility = "hidden";
+img.src =
+  "https://github.com/codeshifu/assets/blob/main/gifs/eevee.gif?raw=true";
+
+document.body.appendChild(img);
 
 let timerHandle;
 let previousScrollHeight = 0;
@@ -9,6 +21,10 @@ let shared = {}; // shared.js module
   const sharedSrc = chrome.runtime.getURL("shared.js");
   shared = await import(sharedSrc);
 })();
+
+const showImage = () => {
+  img.style.visibility = "visible";
+};
 
 const getFollowingsContainer = () => {
   return document.querySelector('[aria-label="Timeline: Following"]');
@@ -91,22 +107,21 @@ const scrollFollowingList = async ({ unfollowNotFollowing, demo } = {}) => {
 
     await shared.delay(3000);
     scrollFollowingList({ unfollowNotFollowing, demo });
-  } else {
-    console.log(
-      previousScrollHeight !== html.scrollHeight,
-      stop,
-      shared.isExtensionPage()
-    );
   }
 };
 
-const stopUnfollowing = () => {
+const stopUnfollowing = async () => {
   stop = true;
   if (timerHandle) clearInterval(timerHandle);
 
-  shared.storage.get(shared.reloadOnStoppedKey).then((shouldReload) => {
-    if (shouldReload) shared.delay(3000).then(window.location.reload);
-  });
+  const shouldReload = await shared.storage.get(shared.reloadOnStoppedKey);
+  if (shouldReload) {
+    img.src =
+      "https://github.com/codeshifu/assets/blob/main/gifs/mario_wave.gif?raw=true";
+
+    await shared.delay(3000);
+    window.location.reload();
+  }
 };
 
 const startTimer = () => {
@@ -119,6 +134,7 @@ const startTimer = () => {
 
 const run = ({ unfollowNotFollowing, demo } = {}) => {
   stop = false;
+  showImage();
   scrollFollowingList({ unfollowNotFollowing, demo });
   startTimer();
 };

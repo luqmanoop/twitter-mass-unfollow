@@ -9,8 +9,17 @@ const unfollowNotFollowingBtn = document.querySelector(
   "#unfollow-not-following"
 );
 
-const unfollowAllBtnText = unfollowAllBtn.textContent;
-const unfollowNotFollowingBtnText = unfollowNotFollowingBtn.textContent;
+const rerenderButtons = (reset) => {
+  if (reset) {
+    inProgress = false;
+    unfollowAllBtn.disabled = false;
+    unfollowNotFollowingBtn.disabled = false;
+  } else {
+    inProgress = true;
+    unfollowAllBtn.disabled = true;
+    unfollowNotFollowingBtn.disabled = true;
+  }
+};
 
 window.addEventListener("load", () => {
   shared.sendMessage({ type: shared.CHECK_IN_PROGRESS }).then((value) => {
@@ -18,25 +27,6 @@ window.addEventListener("load", () => {
   });
 });
 
-const rerenderButtons = (reset) => {
-  if (reset) {
-    inProgress = false;
-
-    unfollowAllBtn.textContent = unfollowAllBtnText;
-    unfollowNotFollowingBtn.textContent = unfollowNotFollowingBtnText;
-
-    unfollowAllBtn.disabled = false;
-    unfollowNotFollowingBtn.disabled = false;
-  } else {
-    inProgress = true;
-
-    unfollowAllBtn.textContent = "🧙🏻‍♂️";
-    unfollowNotFollowingBtn.textContent = "🧙🏻‍♂️";
-
-    unfollowAllBtn.disabled = true;
-    unfollowNotFollowingBtn.disabled = true;
-  }
-};
 
 const init = (type) => {
   if (inProgress) return;

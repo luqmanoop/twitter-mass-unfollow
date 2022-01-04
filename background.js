@@ -1,12 +1,12 @@
-chrome.runtime.onInstalled.addListener(({ reason }) => {
+chrome.runtime.onInstalled.addListener(async ({ reason }) => {
   if (reason === chrome.runtime.OnInstalledReason.INSTALL) {
-    chrome.storage.sync
-      .set({ "twitter-mass-unfollow-timer": true })
-      .then(() => {
-        chrome.tabs.create({
-          url: "options.html",
-        });
-      });
+    await chrome.storage.sync.set({
+      "twitter-mass-unfollow-reload-on-stopped": true,
+    });
+    await chrome.storage.sync.set({ "twitter-mass-unfollow-timer": true });
+    chrome.tabs.create({
+      url: "options.html",
+    });
   }
   chrome.action.disable();
   chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {

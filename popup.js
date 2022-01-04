@@ -30,8 +30,8 @@ const rerenderButtons = (reset) => {
   } else {
     inProgress = true;
 
-    unfollowAllBtn.textContent = "🧙🏻‍♂️...";
-    unfollowNotFollowingBtn.textContent = "🧙🏻‍♂️...";
+    unfollowAllBtn.textContent = "🧙🏻‍♂️";
+    unfollowNotFollowingBtn.textContent = "🧙🏻‍♂️";
 
     unfollowAllBtn.disabled = true;
     unfollowNotFollowingBtn.disabled = true;

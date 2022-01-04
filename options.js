@@ -1,13 +1,25 @@
 import * as shared from "./shared.js";
 
 const form = document.querySelector("form");
-const timer = document.querySelector("#timer");
-shared.storage.get(shared.timerKey).then((value) => {
-  timer.checked = value;
-});
+const timerCheckbox = document.querySelector("#timer");
+const reloadOnStoppedCheckbox = document.querySelector("#reload-on-stopped");
 
-timer.addEventListener("change", (e) => {
-  shared.storage.set(shared.timerKey, e.target.checked);
+Promise.all([
+  shared.storage.get(shared.timerKey),
+  shared.storage.get(shared.reloadOnStoppedKey),
+])
+  .then(([timer, reload]) => {
+    timerCheckbox.checked = timer;
+    reloadOnStoppedCheckbox.checked = reload;
+  })
+  .catch(console.log);
+
+[timerCheckbox, reloadOnStoppedCheckbox].forEach((elem) => {
+  elem.addEventListener("change", (e) => {
+    const key = e.target.getAttribute("data-key");
+    console.log(key);
+    shared.storage.set(key, e.target.checked);
+  });
 });
 
 shared.storage.get(shared.whiteListedUsersKey).then((whitelistedUsers) => {

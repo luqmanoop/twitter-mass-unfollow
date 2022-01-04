@@ -8,6 +8,7 @@ export const CHECK_IN_PROGRESS = "CHECK_IN_PROGRESS";
 
 export const whiteListedUsersKey = "twitter-mass-unfollow-whitelisted";
 export const timerKey = "twitter-mass-unfollow-timer";
+export const reloadOnStoppedKey = "twitter-mass-unfollow-reload-on-stopped";
 
 export const sendMessage = async (msg) => {
   const tabs = await chrome.tabs.query({ active: true, currentWindow: true });

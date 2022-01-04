@@ -103,9 +103,10 @@ const scrollFollowingList = async ({ unfollowNotFollowing, demo } = {}) => {
 const stopUnfollowing = () => {
   stop = true;
   if (timerHandle) clearInterval(timerHandle);
-  setTimeout(() => {
-    window.location.reload(); // TODO: config. reload on stop
-  }, 1000);
+
+  shared.storage.get(shared.reloadOnStoppedKey).then((shouldReload) => {
+    if (shouldReload) shared.delay(3000).then(window.location.reload);
+  });
 };
 
 const startTimer = () => {

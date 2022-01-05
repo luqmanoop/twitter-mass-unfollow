@@ -91,7 +91,7 @@ const unfollow = async (followingButtons = [], demo) => {
         followingButton.click();
         confirmUnfollow();
       }
-      await shared.delay(50);
+      await shared.delay(500);
     }
   }
 };

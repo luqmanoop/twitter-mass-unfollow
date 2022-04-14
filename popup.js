@@ -27,7 +27,6 @@ window.addEventListener("load", async () => {
     .sendMessage({ type: shared.CHECK_IN_PROGRESS })
     .then((value) => {
       if (typeof value !== "boolean") {
-        console.log("here", Date.now(), tab);
         chrome.scripting.executeScript({
           target: { tabId: tab.id },
           files: ["script.js"],

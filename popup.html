@@ -59,7 +59,7 @@
       padding: 1rem 0;
       font-weight: bold;
     }
-    
+
     button#demo {
       background-color: transparent;
       border: 1px solid #2C3E50;
@@ -77,11 +77,15 @@
     }
 
     button:active {
-      transform: scale(0.98);
+      transform: scale(0.9);
     }
 
     button:disabled {
+      border: 1px solid #999999;
+      background-color: #cccccc;
+      color: #666666;
       cursor: not-allowed;
+      box-shadow: none;
       transform: scale(1);
     }
   </style>

@@ -21,12 +21,27 @@ const rerenderButtons = (reset) => {
   }
 };
 
-window.addEventListener("load", () => {
-  shared.sendMessage({ type: shared.CHECK_IN_PROGRESS }).then((value) => {
-    if (value) rerenderButtons();
-  });
-});
+window.addEventListener("load", async () => {
+  const tab = await shared.getCurrentTab();
+  shared
+    .sendMessage({ type: shared.CHECK_IN_PROGRESS })
+    .then((value) => {
+      if (typeof value !== "boolean") {
+        console.log("here", Date.now(), tab);
+        chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          files: ["script.js"],
+        });
 
+        return;
+      }
+
+      if (value) rerenderButtons();
+    })
+    .catch(() => {
+      console.log("inject it");
+    });
+});
 
 const init = (type) => {
   if (inProgress) return;

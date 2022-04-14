@@ -1,9 +1,9 @@
+console.log("::twu init::");
 const html = document.querySelector("html");
 let timerHandle;
 let previousScrollHeight = 0;
-let stop;
+let inProgress;
 const unfollowedUsers = [];
-
 let shared = {}; // shared.js module
 (async () => {
   const sharedSrc = chrome.runtime.getURL("shared.js");
@@ -11,14 +11,34 @@ let shared = {}; // shared.js module
 })();
 
 const tmuWrapper = document.createElement("div");
-tmuWrapper.className = "tmu-wrapper";
+tmuWrapper.style.cssText = `
+  position: fixed;
+  right: 20px;
+  bottom: 70px;
+  z-index: 10;
+  display: flex;
+  visibility: hidden;`.trim();
 
 let totalUnfollowed = document.createElement("h1");
 totalUnfollowed.textContent = -1230;
-totalUnfollowed.className = "tmu-counter";
+totalUnfollowed.style.cssText = `
+  background: #1da1f2;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 50%;
+  margin-right: 10px;
+  font-size: 16px;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: flex-end;
+`;
 
 let img = document.createElement("img");
-img.className = "tmu-img";
+img.style.width = "80px";
 img.alt = "running";
 img.src =
   "https://github.com/codeshifu/assets/blob/main/gifs/eevee.gif?raw=true";
@@ -99,7 +119,7 @@ const unfollow = async (followingButtons = [], demo) => {
 const scrollFollowingList = async ({ unfollowNotFollowing, demo } = {}) => {
   if (
     previousScrollHeight !== html.scrollHeight &&
-    !stop &&
+    inProgress &&
     shared.isExtensionPage()
   ) {
     previousScrollHeight = html.scrollHeight;
@@ -126,7 +146,9 @@ const scrollFollowingList = async ({ unfollowNotFollowing, demo } = {}) => {
 };
 
 const stopUnfollowing = async () => {
-  stop = true;
+  if (!inProgress) return;
+
+  inProgress = false;
   if (timerHandle) clearInterval(timerHandle);
 
   const shouldReload = await shared.storage.get(shared.reloadOnStoppedKey);
@@ -148,30 +170,42 @@ const startTimer = () => {
 };
 
 const run = ({ unfollowNotFollowing, demo } = {}) => {
-  stop = false;
+  if (inProgress) return;
+  
+  inProgress = true;
   showContentInDOM();
   scrollFollowingList({ unfollowNotFollowing, demo });
   startTimer();
 };
 
 chrome.runtime.onMessage.addListener((message, sender, reply) => {
-  switch (message.type) {
-    case shared.UNFOLLOW_ALL:
-      run();
-      return;
-    case shared.UNFOLLOW_NOT_FOLLOWING:
-      run({ unfollowNotFollowing: true });
-      return;
-    case shared.DEMO:
-      run({ demo: true });
-      return;
-    case shared.STOP:
-      stopUnfollowing();
-      return;
-    case shared.CHECK_IN_PROGRESS:
-      reply({ payload: previousScrollHeight !== 0 && !stop });
-      return;
-    default:
-      break;
+  try {
+    switch (message.type) {
+      case shared.UNFOLLOW_ALL:
+        run();
+        return;
+      case shared.UNFOLLOW_NOT_FOLLOWING:
+        run({ unfollowNotFollowing: true });
+        return;
+      case shared.DEMO:
+        run({ demo: true });
+        return;
+      case shared.STOP:
+        stopUnfollowing();
+        return;
+      case shared.CHECK_IN_PROGRESS:
+        reply({ payload: previousScrollHeight !== 0 && inProgress });
+        return;
+      default:
+        break;
+    }
+  } catch (error) {
+    console.log(error);
   }
+});
+
+window.addEventListener("beforeunload", () => stopUnfollowing());
+
+document.body.addEventListener("click", () => {
+  if (!shared.isExtensionPage() && inProgress) stopUnfollowing();
 });

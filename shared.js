@@ -10,13 +10,16 @@ export const whiteListedUsersKey = "twitter-mass-unfollow-whitelisted";
 export const timerKey = "twitter-mass-unfollow-timer";
 export const reloadOnStoppedKey = "twitter-mass-unfollow-reload-on-stopped";
 
+export const getCurrentTab = async () => {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  return tab;
+};
+
 export const sendMessage = async (msg) => {
-  const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+  const tab = await getCurrentTab();
 
   return new Promise((resolve, reject) => {
-    if (!tabs.length) reject("No active tabs");
-
-    chrome.tabs.sendMessage(tabs[0].id, msg, (response) => {
+    chrome.tabs.sendMessage(tab.id, msg, (response) => {
       if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
       if (response) resolve(response.payload);
       reject("No response");
@@ -24,8 +27,8 @@ export const sendMessage = async (msg) => {
   }).catch(console.log);
 };
 
-export const isExtensionPage = () => {
-  return /https:\/\/(.*\.)?twitter\.com\/.*\/following/.test(location.href);
+export const isExtensionPage = (url) => {
+  return /https:\/\/(.*\.)?twitter\.com\/.*\/following/.test(url || location.href);
 };
 
 export const storage = {

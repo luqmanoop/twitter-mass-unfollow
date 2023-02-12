@@ -3,7 +3,7 @@ const html = document.querySelector("html");
 let timerHandle;
 let previousScrollHeight = 0;
 let inProgress;
-const unfollowedUsers = [];
+const unFollowedUsers = [];
 let shared = {}; // shared.js module
 (async () => {
   const sharedSrc = chrome.runtime.getURL("shared.js");
@@ -19,9 +19,9 @@ tmuWrapper.style.cssText = `
   display: flex;
   visibility: hidden;`.trim();
 
-let totalUnfollowed = document.createElement("h1");
-totalUnfollowed.textContent = -1230;
-totalUnfollowed.style.cssText = `
+let totalUnFollowed = document.createElement("h1");
+totalUnFollowed.textContent = -1230;
+totalUnFollowed.style.cssText = `
   background: #1da1f2;
   color: #fff;
   font-weight: bold;
@@ -43,7 +43,7 @@ img.alt = "running";
 img.src =
   "https://github.com/codeshifu/assets/blob/main/gifs/eevee.gif?raw=true";
 
-tmuWrapper.appendChild(totalUnfollowed);
+tmuWrapper.appendChild(totalUnFollowed);
 tmuWrapper.appendChild(img);
 
 document.body.appendChild(tmuWrapper);
@@ -53,19 +53,21 @@ const showContentInDOM = () => {
 };
 
 const getFollowingsContainer = () => {
-  return document.querySelector('[aria-label="Timeline: Following"]');
+  return document.querySelector("section[role=region] div");
 };
 
 const getFollowings = () =>
   Array.from(
-    document.querySelectorAll('[aria-label~="Following"][role=button]')
+    document.querySelectorAll(
+      'section[role=region] [data-testid="UserCell"] [role=button]'
+    )
   );
 
 const getUsername = (followingBtn) => {
   return followingBtn
     .getAttribute("aria-label")
     .toLowerCase()
-    .replace("following @", "");
+    .replace(/.*@/, "");
 };
 
 const filterFollowings = async (followings, unfollowNotFollowing) => {
@@ -79,14 +81,12 @@ const filterFollowings = async (followings, unfollowNotFollowing) => {
 
   return unfollowNotFollowing
     ? toUnfollow.filter((following) => {
-        const elem = Array.from(
-          following.parentElement.parentElement.firstElementChild.querySelectorAll(
-            "span"
-          )
-        ).slice(-1)[0];
+        const followsYou =
+          !!following.parentElement.parentElement.querySelector(
+            '[data-testid="userFollowIndicator"]'
+          );
 
-        if (!elem) return true;
-        return !elem.textContent.toLowerCase().includes("follows you");
+        return followsYou ? false : true;
       })
     : toUnfollow;
 };
@@ -100,9 +100,9 @@ const confirmUnfollow = () => {
 const unfollow = async (followingButtons = [], demo) => {
   for (const followingButton of followingButtons) {
     const username = getUsername(followingButton);
-    if (!unfollowedUsers.includes(username)) {
-      unfollowedUsers.push(username);
-      totalUnfollowed.textContent = `-${unfollowedUsers.length}`;
+    if (!unFollowedUsers.includes(username)) {
+      unFollowedUsers.push(username);
+      totalUnFollowed.textContent = `-${unFollowedUsers.length}`;
 
       if (demo) {
         followingButton.firstElementChild.firstElementChild.firstElementChild.textContent =
@@ -128,12 +128,12 @@ const scrollFollowingList = async ({ unfollowNotFollowing, demo } = {}) => {
     const scrollBy = followingsContainer.clientHeight;
 
     const followings = getFollowings();
-    const accountsToUnffolow = await filterFollowings(
+    const accountsToUnfollow = await filterFollowings(
       followings,
       unfollowNotFollowing
     );
 
-    await unfollow(accountsToUnffolow, demo);
+    await unfollow(accountsToUnfollow, demo);
 
     html.scroll({
       top: followingsContainer.offsetHeight + scrollBy,
@@ -171,7 +171,7 @@ const startTimer = () => {
 
 const run = ({ unfollowNotFollowing, demo } = {}) => {
   if (inProgress) return;
-  
+
   inProgress = true;
   showContentInDOM();
   scrollFollowingList({ unfollowNotFollowing, demo });

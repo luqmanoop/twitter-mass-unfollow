@@ -1,7 +1,7 @@
 {
   "name": "Twitter Mass Unfollow",
   "description": "A simple (configurable) way to mass unfollow your Twitter followings",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "manifest_version": 3,
   "icons": {
     "16": "images/16.png",

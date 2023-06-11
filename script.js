@@ -4,6 +4,7 @@ let timerHandle;
 let previousScrollHeight = 0;
 let inProgress;
 const unFollowedUsers = [];
+const unfollowedUsernames = [];
 let shared = {}; // shared.js module
 (async () => {
   const sharedSrc = chrome.runtime.getURL("shared.js");
@@ -102,6 +103,7 @@ const unfollow = async (followingButtons = [], demo) => {
     const username = getUsername(followingButton);
     if (!unFollowedUsers.includes(username)) {
       unFollowedUsers.push(username);
+      unfollowedUsernames.push(username); // Add username to the array
       totalUnFollowed.textContent = `-${unFollowedUsers.length}`;
 
       if (demo) {
@@ -147,6 +149,8 @@ const scrollFollowingList = async ({ unfollowNotFollowing, demo } = {}) => {
 
 const stopUnfollowing = async () => {
   if (!inProgress) return;
+  
+  downloadUnfollowedUsernames(); // Download the file with unfollowed usernames
 
   inProgress = false;
   if (timerHandle) clearInterval(timerHandle);
@@ -159,6 +163,25 @@ const stopUnfollowing = async () => {
   tmuWrapper.style.visibility = "hidden";
   img.src =
     "https://github.com/codeshifu/assets/blob/main/gifs/eevee.gif?raw=true";
+};
+
+const downloadUnfollowedUsernames = () => {
+  const timestamp = new Date().getTime();
+  const filename = `unfollowed-${timestamp}.txt`;
+  const content = unfollowedUsernames.join("\n");
+  const blob = new Blob([content], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+  
+  const downloadLink = document.createElement("a");
+  downloadLink.href = url;
+  downloadLink.download = filename;
+  downloadLink.style.display = "none";
+  document.body.appendChild(downloadLink);
+  
+  downloadLink.click();
+  
+  document.body.removeChild(downloadLink);
+  URL.revokeObjectURL(url);
 };
 
 const startTimer = () => {

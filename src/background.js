@@ -1,11 +1,13 @@
+'use strict';
+
 chrome.runtime.onInstalled.addListener(async ({ reason }) => {
   if (reason === chrome.runtime.OnInstalledReason.INSTALL) {
     await chrome.storage.sync.set({
-      "twitter-mass-unfollow-reload-on-stopped": true,
+      'twitter-mass-unfollow-reload-on-stopped': true,
     });
-    await chrome.storage.sync.set({ "twitter-mass-unfollow-timer": true });
+    await chrome.storage.sync.set({ 'twitter-mass-unfollow-timer': true });
     chrome.tabs.create({
-      url: "options.html",
+      url: 'options.html',
     });
   }
   chrome.action.disable();
@@ -15,9 +17,9 @@ chrome.runtime.onInstalled.addListener(async ({ reason }) => {
         conditions: [
           new chrome.declarativeContent.PageStateMatcher({
             pageUrl: {
-              hostSuffix: ".twitter.com",
-              pathContains: "following",
-              schemes: ["https"],
+              hostSuffix: '.x.com',
+              pathContains: 'following',
+              schemes: ['https'],
             },
           }),
         ],

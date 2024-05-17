@@ -1,16 +1,15 @@
-console.log("::twu init::");
-const html = document.querySelector("html");
+'use strict';
+
+import * as utils from './utils.js';
+
+console.log('::twu init::');
+const html = document.querySelector('html');
 let timerHandle;
 let previousScrollHeight = 0;
 let inProgress;
 const unFollowedUsers = [];
-let shared = {}; // shared.js module
-(async () => {
-  const sharedSrc = chrome.runtime.getURL("shared.js");
-  shared = await import(sharedSrc);
-})();
 
-const tmuWrapper = document.createElement("div");
+const tmuWrapper = document.createElement('div');
 tmuWrapper.style.cssText = `
   position: fixed;
   right: 20px;
@@ -19,7 +18,7 @@ tmuWrapper.style.cssText = `
   display: flex;
   visibility: hidden;`.trim();
 
-let totalUnFollowed = document.createElement("h1");
+let totalUnFollowed = document.createElement('h1');
 totalUnFollowed.textContent = -1230;
 totalUnFollowed.style.cssText = `
   background: #1da1f2;
@@ -37,11 +36,11 @@ totalUnFollowed.style.cssText = `
   align-self: flex-end;
 `;
 
-let img = document.createElement("img");
-img.style.width = "80px";
-img.alt = "running";
+let img = document.createElement('img');
+img.style.width = '80px';
+img.alt = 'running';
 img.src =
-  "https://github.com/codeshifu/assets/blob/main/gifs/eevee.gif?raw=true";
+  'https://github.com/luqmanoop/assets/blob/main/gifs/eevee.gif?raw=true';
 
 tmuWrapper.appendChild(totalUnFollowed);
 tmuWrapper.appendChild(img);
@@ -49,11 +48,11 @@ tmuWrapper.appendChild(img);
 document.body.appendChild(tmuWrapper);
 
 const showContentInDOM = () => {
-  tmuWrapper.style.visibility = "visible";
+  tmuWrapper.style.visibility = 'visible';
 };
 
 const getFollowingsContainer = () => {
-  return document.querySelector("section[role=region] div");
+  return document.querySelector('section[role=region] div');
 };
 
 const getFollowings = () =>
@@ -65,13 +64,13 @@ const getFollowings = () =>
 
 const getUsername = (followingBtn) => {
   return followingBtn
-    .getAttribute("aria-label")
+    .getAttribute('aria-label')
     .toLowerCase()
-    .replace(/.*@/, "");
+    .replace(/.*@/, '');
 };
 
 const filterFollowings = async (followings, unfollowNotFollowing) => {
-  const whitelistedUsers = await shared.storage.get(shared.whiteListedUsersKey);
+  const whitelistedUsers = await utils.storage.get(utils.whiteListedUsersKey);
 
   const toUnfollow = followings.filter((followingBtn) => {
     if (!whitelistedUsers) return true;
@@ -93,7 +92,7 @@ const filterFollowings = async (followings, unfollowNotFollowing) => {
 
 const confirmUnfollow = () => {
   document
-    .querySelector("[data-testid=confirmationSheetDialog] div[role=button]")
+    .querySelector('[data-testid=confirmationSheetDialog] div[role=button]')
     .click();
 };
 
@@ -106,21 +105,25 @@ const unfollow = async (followingButtons = [], demo) => {
 
       if (demo) {
         followingButton.firstElementChild.firstElementChild.firstElementChild.textContent =
-          "Follow";
+          'Follow';
       } else {
         followingButton.click();
         confirmUnfollow();
       }
-      await shared.delay(500);
+      await utils.delay(500);
     }
   }
 };
+
+console.log({
+  isExtensionPage: utils.isExtensionPage(),
+});
 
 const scrollFollowingList = async ({ unfollowNotFollowing, demo } = {}) => {
   if (
     previousScrollHeight !== html.scrollHeight &&
     inProgress &&
-    shared.isExtensionPage()
+    utils.isExtensionPage()
   ) {
     previousScrollHeight = html.scrollHeight;
 
@@ -137,10 +140,10 @@ const scrollFollowingList = async ({ unfollowNotFollowing, demo } = {}) => {
 
     html.scroll({
       top: followingsContainer.offsetHeight + scrollBy,
-      behavior: "smooth",
+      behavior: 'smooth',
     });
 
-    await shared.delay(3000);
+    await utils.delay(3000);
     scrollFollowingList({ unfollowNotFollowing, demo });
   }
 };
@@ -151,18 +154,18 @@ const stopUnfollowing = async () => {
   inProgress = false;
   if (timerHandle) clearInterval(timerHandle);
 
-  const shouldReload = await shared.storage.get(shared.reloadOnStoppedKey);
+  const shouldReload = await utils.storage.get(utils.reloadOnStoppedKey);
   img.src =
-    "https://github.com/codeshifu/assets/blob/main/gifs/mario_wave.gif?raw=true";
-  await shared.delay(2000);
+    'https://github.com/luqmanoop/assets/blob/main/gifs/mario_wave.gif?raw=true';
+  await utils.delay(2000);
   if (shouldReload) window.location.reload();
-  tmuWrapper.style.visibility = "hidden";
+  tmuWrapper.style.visibility = 'hidden';
   img.src =
-    "https://github.com/codeshifu/assets/blob/main/gifs/eevee.gif?raw=true";
+    'https://github.com/luqmanoop/assets/blob/main/gifs/eevee.gif?raw=true';
 };
 
 const startTimer = () => {
-  shared.storage.get(shared.timerKey).then((autoStop) => {
+  utils.storage.get(utils.timerKey).then((autoStop) => {
     if (autoStop) {
       timerHandle = setTimeout(() => stopUnfollowing(), 1000 * 60); // 60secs
     }
@@ -181,19 +184,19 @@ const run = ({ unfollowNotFollowing, demo } = {}) => {
 chrome.runtime.onMessage.addListener((message, sender, reply) => {
   try {
     switch (message.type) {
-      case shared.UNFOLLOW_ALL:
+      case utils.UNFOLLOW_ALL:
         run();
         return;
-      case shared.UNFOLLOW_NOT_FOLLOWING:
+      case utils.UNFOLLOW_NOT_FOLLOWING:
         run({ unfollowNotFollowing: true });
         return;
-      case shared.DEMO:
+      case utils.DEMO:
         run({ demo: true });
         return;
-      case shared.STOP:
+      case utils.STOP:
         stopUnfollowing();
         return;
-      case shared.CHECK_IN_PROGRESS:
+      case utils.CHECK_IN_PROGRESS:
         reply({ payload: previousScrollHeight !== 0 && inProgress });
         return;
       default:
@@ -204,8 +207,8 @@ chrome.runtime.onMessage.addListener((message, sender, reply) => {
   }
 });
 
-window.addEventListener("beforeunload", () => stopUnfollowing());
+window.addEventListener('beforeunload', () => stopUnfollowing());
 
-document.body.addEventListener("click", () => {
-  if (!shared.isExtensionPage() && inProgress) stopUnfollowing();
+document.body.addEventListener('click', () => {
+  if (!utils.isExtensionPage() && inProgress) stopUnfollowing();
 });

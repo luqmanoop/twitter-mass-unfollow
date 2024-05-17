@@ -29,7 +29,7 @@
     p {
       margin: 0.2rem 0 1rem;
       color: #a0a0a0;
-      font-size: 1.8rem;
+      font-size: 1.6rem;
     }
 
     a {
@@ -50,7 +50,6 @@
       border-radius: 0.3rem;
       cursor: pointer;
       transform: scale(1);
-      transition: all;
       font-size: 1.4rem;
       user-select: none;
       -webkit-user-select: none;
@@ -58,6 +57,7 @@
       box-shadow: -0.4rem 0.6rem #0277bd;
       padding: 1rem 0;
       font-weight: bold;
+      transition: transform 0.1s ease;
     }
 
     button#demo {
@@ -76,8 +76,12 @@
       box-shadow: -0.4rem 0.6rem #610000;
     }
 
+    button:hover {
+      transform: scale(0.97);
+    }
+
     button:active {
-      transform: scale(0.9);
+      transform: scale(0.95);
     }
 
     button:disabled {

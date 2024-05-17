@@ -1,5 +1,5 @@
 {
-  "name": "Twitter Mass Unfollow",
+  "name": "X (Twitter) Mass Unfollow",
   "description": "A simple (configurable) way to mass unfollow your X (formerly Twitter) followings",
   "version": "1.2.0",
   "manifest_version": 3,

@@ -54,7 +54,7 @@ const getFollowingsContainer = () => {
   return document.querySelector('section[role=region] div');
 };
 
-const getFollowings = () =>
+const getFollowingButtons = () =>
   Array.from(document.querySelectorAll("button[data-testid$='-unfollow']"));
 
 const getUsername = (followingBtn) => {
@@ -123,7 +123,7 @@ const scrollFollowingList = async ({ unfollowNotFollowing, demo } = {}) => {
     const followingsContainer = getFollowingsContainer();
     const scrollBy = followingsContainer.clientHeight;
 
-    const followings = getFollowings();
+    const followings = getFollowingButtons();
     const accountsToUnfollow = await filterFollowings(
       followings,
       unfollowNotFollowing

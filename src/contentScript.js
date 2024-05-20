@@ -2,7 +2,6 @@
 
 import * as utils from './utils.js';
 
-console.log('::twu init::');
 const html = document.querySelector('html');
 let timerHandle;
 let previousScrollHeight = 0;
@@ -56,11 +55,7 @@ const getFollowingsContainer = () => {
 };
 
 const getFollowings = () =>
-  Array.from(
-    document.querySelectorAll(
-      'section[role=region] [data-testid="UserCell"] [role=button]'
-    )
-  );
+  Array.from(document.querySelectorAll("button[data-testid$='-unfollow']"));
 
 const getUsername = (followingBtn) => {
   return followingBtn
@@ -116,10 +111,6 @@ const unfollow = async (followingButtons = [], demo) => {
     }
   }
 };
-
-console.log({
-  isExtensionPage: utils.isExtensionPage(),
-});
 
 const scrollFollowingList = async ({ unfollowNotFollowing, demo } = {}) => {
   if (

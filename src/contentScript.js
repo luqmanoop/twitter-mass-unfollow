@@ -1,5 +1,3 @@
-'use strict';
-
 import * as utils from './utils.js';
 
 const html = document.querySelector('html');

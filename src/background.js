@@ -1,5 +1,3 @@
-'use strict';
-
 chrome.runtime.onInstalled.addListener(async ({ reason }) => {
   if (reason === chrome.runtime.OnInstalledReason.INSTALL) {
     await chrome.storage.sync.set({

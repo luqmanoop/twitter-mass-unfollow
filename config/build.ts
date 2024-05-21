@@ -25,8 +25,8 @@ await Bun.build({
   entrypoints: resolveEntryPoints([
     ...scripts,
     service_worker,
-    'options.js',
-    'popup.js',
+    'options.ts',
+    'popup.ts',
   ]),
   outdir,
   splitting: true,

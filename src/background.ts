@@ -8,7 +8,9 @@ chrome.runtime.onInstalled.addListener(async ({ reason }) => {
       url: 'options.html',
     });
   }
+
   chrome.action.disable();
+
   chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
     const rules = [
       {

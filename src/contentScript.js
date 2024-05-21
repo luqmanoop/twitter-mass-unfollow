@@ -86,7 +86,7 @@ const filterFollowings = async (followings, unfollowNotFollowing) => {
 };
 
 const confirmUnfollow = () => {
-  ddocument
+  document
     .querySelector(
       '[data-testid=confirmationSheetDialog] button[data-testid=confirmationSheetConfirm]'
     )

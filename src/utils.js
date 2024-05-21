@@ -1,3 +1,5 @@
+import elementReady from 'element-ready';
+
 /* messaging events */
 export const DEMO = 'DEMO';
 export const UNFOLLOW_ALL = 'UNFOLLOW_ALL';
@@ -13,6 +15,11 @@ export const reloadOnStoppedKey = 'twitter-mass-unfollow-reload-on-stopped';
 export const getCurrentTab = async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   return tab;
+};
+
+export const waitForElement = async (selector) => {
+  const element = await elementReady(selector, { stopOnDomReady: false });
+  return element;
 };
 
 export const sendMessage = async (msg) => {

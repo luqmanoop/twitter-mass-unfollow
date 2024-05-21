@@ -85,12 +85,18 @@ const filterFollowings = async (followings, unfollowNotFollowing) => {
     : toUnfollow;
 };
 
-const confirmUnfollow = () => {
-  document
-    .querySelector(
-      '[data-testid=confirmationSheetDialog] button[data-testid=confirmationSheetConfirm]'
-    )
-    .click();
+const confirmUnfollow = async () => {
+  const confirmUnfollowButton = await utils.waitForElement(
+    '[data-testid=confirmationSheetDialog] button[data-testid=confirmationSheetConfirm]'
+  );
+
+  if (!confirmUnfollowButton) {
+    inProgress = false;
+    console.log('confirm unfollow button not found');
+    return;
+  }
+
+  confirmUnfollowButton.click();
 };
 
 const unfollow = async (followingButtons = [], demo) => {
@@ -105,7 +111,7 @@ const unfollow = async (followingButtons = [], demo) => {
           'Follow';
       } else {
         followingButton.click();
-        confirmUnfollow();
+        await confirmUnfollow();
       }
       await utils.delay(500);
     }

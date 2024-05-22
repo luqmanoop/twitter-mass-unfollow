@@ -24,8 +24,20 @@ export const waitForElement = async (selector: string) => {
   return element;
 };
 
-export const sendMessage = async (msg: Message) =>
-  chrome.runtime.sendMessage(msg);
+export const sendMessage = async (msg: Message) => {
+  const tab = await getCurrentTab();
+  const tabId = tab.id;
+  
+  if (!tabId) return;
+
+  return new Promise((resolve, reject) => {
+    chrome.tabs.sendMessage(tabId, msg, (response) => {
+      if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
+      if (response) resolve(response.payload);
+      reject('No response');
+    });
+  }).catch(console.log);
+};
 
 export const isExtensionPage = (url: string = location.href) => {
   return /https:\/\/(.*\.)?x\.com\/.*\/following/.test(url);

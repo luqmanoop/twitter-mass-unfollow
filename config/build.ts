@@ -29,5 +29,4 @@ await Bun.build({
     'popup.ts',
   ]),
   outdir,
-  splitting: true,
 });

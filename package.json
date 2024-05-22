@@ -4,24 +4,21 @@
   "description": "A simple (configurable) way to mass unfollow your X (formerly Twitter) followings",
   "private": true,
   "scripts": {
-    "watch": "webpack --mode=development --watch --config config/webpack.config.js",
-    "build": "webpack --mode=production --config config/webpack.config.js",
-    "pack": "node pack.js",
-    "repack": "npm run build && npm run pack",
-    "format": "prettier --write --ignore-unknown \"{config,public,src}/**/*.{html,css,js,ts,json}\""
+    "dev": "bun run config/watch.ts --dir=src,public",
+    "build": "bun run config/build.ts",
+    "pack": "bun run config/pack.ts"
   },
   "devDependencies": {
+    "@types/adm-zip": "^0.5.5",
+    "@types/bun": "latest",
+    "@types/chrome": "^0.0.268",
     "adm-zip": "^0.5.12",
-    "copy-webpack-plugin": "^10.2.4",
-    "css-loader": "^6.11.0",
-    "file-loader": "^6.2.0",
-    "mini-css-extract-plugin": "^2.9.0",
-    "prettier": "^2.8.8",
-    "webpack": "^5.91.0",
-    "webpack-cli": "^4.10.0",
-    "webpack-merge": "^5.10.0"
+    "prettier": "^2.8.8"
   },
   "dependencies": {
     "element-ready": "^7.0.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
   }
 }

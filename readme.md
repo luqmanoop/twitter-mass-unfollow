@@ -1,5 +1,5 @@
 <div align="center">
-<img src="/public/icons/128.png" width="150" height="150" />
+<img src="/public/icons/128.png" width="128" height="128" />
 <h1>X (Twitter) Mass Unfollow</h1>
 <p>A simple (configurable) way to mass unfollow your X (Twitter) followings</p>
 

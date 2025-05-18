@@ -1,21 +1,25 @@
-# X (Twitter) Mass Unfollow
+<div align="center">
+<img src="/public/icons/128.png" width="150" height="150" />
+<h1>X (Twitter) Mass Unfollow</h1>
+<p>A simple (configurable) way to mass unfollow your X (Twitter) followings</p>
+
+</div>
 
 <img src="/images/extension.png" alt="X (Twitter) Mass Unfollow extension UI" width="65%">
 
-> A simple (configurable) way to mass unfollow your X (Twitter) followings
+Reclaim your X (Twitter) feed — Mass unfollow users with a click of a button.
 
-If your Twitter following is a mess and you'd like to start afresh, look no further. `Twitter Mass Unfollow` will automagically unfollow all or some of your following so you don't have to "clicky clicky" because let's face it, no one has the time for that.
-
-## Prerequisites
-
-- A laptop/desktop computer (lol)
-- [Google Chrome browser](https://www.google.com/chrome/)
+## Features
+- Bulk unfollow options: Unfollow all accounts or selectively unfollow those who don't follow you back.
+- Demo mode: Preview the unfollow process without making any changes to your account.
+- Whitelist functionality: Protect specific accounts from being unfollowed by adding them to a whitelist.
+- Session control: Configurable option to stop the unfollow process after `n` minutes.
 
 ## Usage
 
 - [Install the extension from Chrome Web Store](https://chrome.google.com/webstore/detail/twitter-mass-unfollow/bidolfkgmbnlnijabkjafdajjpocfhol)
-  - TIP: Pin it for easy access
-- Visit your [Twitter following page](https://twitter.com/following)
+  - TIP: Pin the extension for easy access
+- Visit your [X/Twitter following page](https://x.com/following)
 - Click the **DEMO** button to see the extension in action without unfollowing anyone or
 - Click **ALL** to unfollow all followings or **NOT FOLLOWING** to unfollow accounts you follow that are not following you
 - Use **STOP** to abort the whole process
